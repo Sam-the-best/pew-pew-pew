@@ -1,41 +1,41 @@
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    projectile = sprites.createProjectileFromSprite(img`
+    milk_left = sprites.createProjectileFromSprite(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e e . . . . . . . 
-        . . . . . . e e e e . . . . . . 
-        . . . . . . e e e e e . . . . . 
-        . . . . . . e 1 e 1 e . . . . . 
-        . . . . . e e e e e e e . . . . 
-        . . . . . e e e e e e e . . . . 
-        . . . . . e 1 e e e 1 e . . . . 
-        . . . . e e 1 e e 1 1 e e . . . 
-        . . . e e e 1 1 1 1 e e e e . . 
-        . e e e e e e e e e e e e e e . 
-        e e e e e e e e e e e e e e e e 
+        . . . . . . . . . . . . . 1 1 1 
+        . . . . . . . . . . . 1 1 1 1 1 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        . . . . . 1 1 1 1 1 1 1 1 1 1 1 
+        . . . . . . . . 1 1 1 1 1 1 1 1 
+        . . . . . . . . . . . . . 1 1 1 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
         `, mySprite, -1000, 0)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    projectile = sprites.createProjectileFromSprite(img`
+    milk_right = sprites.createProjectileFromSprite(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e . . . . . . . . 
-        . . . . . . . e e . . . . . . . 
-        . . . . . . e e e e . . . . . . 
-        . . . . . . e e e e e . . . . . 
-        . . . . . . e 1 e 1 e . . . . . 
-        . . . . . e e e e e e e . . . . 
-        . . . . . e e e e e e e . . . . 
-        . . . . . e 1 e e e 1 e . . . . 
-        . . . . e e 1 e e 1 1 e e . . . 
-        . . . e e e 1 1 1 1 e e e e . . 
-        . e e e e e e e e e e e e e e . 
-        e e e e e e e e e e e e e e e e 
+        1 1 1 . . . . . . . . . . . . . 
+        1 1 1 1 1 . . . . . . . . . . . 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        1 1 1 1 1 1 1 1 1 1 1 . . . . . 
+        1 1 1 1 1 1 1 1 . . . . . . . . 
+        1 1 1 . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
         `, mySprite, 1000, 0)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -224,7 +224,9 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
-let projectile: Sprite = null
+let milk_right: Sprite = null
+let milk_left: Sprite = null
+let snake: Sprite = null
 let mySprite: Sprite = null
 tiles.setCurrentTilemap(tilemap`level2`)
 mySprite = sprites.create(img`
@@ -250,4 +252,133 @@ scene.cameraFollowSprite(mySprite)
 namespace userconfig {
 export const ARCADE_SCREEN_WIDTH = 225
 export const ARCADE_SCREEN_HEIGHT = 225
+}
+for (let index = 0; index < 10; index++) {
+    snake = sprites.create(img`
+        . . . . c c c c c c c . . . . . 
+        . . . c 6 7 7 7 7 7 6 c . . . . 
+        . . c 6 7 c 6 6 6 6 c 7 c . . . 
+        . . c 7 7 6 f 6 6 f 6 7 6 c . . 
+        . . c 7 7 7 7 7 7 7 7 7 7 c . . 
+        . . f 7 7 7 6 1 f f 1 8 7 f . . 
+        . . f 7 7 7 f 1 f f 1 f 6 f . . 
+        . . f 6 7 7 f 2 2 2 2 f f . . . 
+        . . c f 6 7 7 2 2 2 2 f c c . . 
+        . c 7 7 c c 7 7 7 7 7 7 7 7 c . 
+        c 7 7 7 6 c f 7 7 7 7 1 1 1 7 c 
+        c c 6 6 6 c c f 6 7 1 1 1 1 1 f 
+        . . c 6 6 6 c 6 6 1 1 1 1 1 1 f 
+        . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+        . . . c 6 6 6 6 1 1 1 1 1 6 f . 
+        . . . . c c c c c c c c f f . . 
+        `, SpriteKind.Enemy)
+    animation.runImageAnimation(
+    mySprite,
+    [img`
+        . . . . c c c c c c c . . . . . 
+        . . . c 6 7 7 7 7 7 6 c . . . . 
+        . . c 6 7 c 6 6 6 6 c 7 c . . . 
+        . . c 7 7 6 f 6 6 f 6 7 6 c . . 
+        . . c 7 7 7 7 7 7 7 7 7 7 c . . 
+        . . f 7 7 7 6 1 f f 1 8 7 f . . 
+        . . f 7 7 7 f 1 f f 1 f 6 f . . 
+        . . f 6 7 7 f 2 2 2 2 f f . . . 
+        . . c f 6 7 7 2 2 2 2 f c c . . 
+        . c 7 7 c c 7 7 7 7 7 7 7 7 c . 
+        c 7 7 7 6 c f 7 7 7 7 1 1 1 7 c 
+        c c 6 6 6 c c f 6 7 1 1 1 1 1 f 
+        . . c 6 6 6 c 6 6 1 1 1 1 1 1 f 
+        . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+        . . . c 6 6 6 6 1 1 1 1 1 6 f . 
+        . . . . c c c c c c c c f f . . 
+        `,img`
+        . . . c c c c c c c . . . . . . 
+        . . c 7 f f 6 6 f f c . . . . . 
+        . c 6 7 6 6 6 6 6 6 7 c . . . . 
+        . c 7 7 7 7 7 7 7 7 7 7 c . . . 
+        . c 7 7 7 6 1 f f 1 8 7 c . . . 
+        . f 7 7 7 f 1 f f 1 f 6 f . . . 
+        . f 7 7 7 f 2 2 2 2 f 6 f . . . 
+        . f 6 7 7 f 2 2 2 2 f 6 c c . . 
+        . . c f 7 7 2 2 2 2 7 7 7 7 c . 
+        . c 7 7 c c 7 7 7 7 7 1 1 1 7 c 
+        c 7 7 7 6 c f 7 7 7 1 1 1 1 1 f 
+        c c 6 6 6 c c f 6 1 1 1 1 1 1 f 
+        . . c 6 6 6 c 6 6 1 1 1 1 1 6 f 
+        . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+        . . . c 6 6 6 6 6 1 1 1 1 6 f . 
+        . . . . c c c c c c c c f f . . 
+        `,img`
+        . . . c c c c c c c . . . . . . 
+        . . c 7 f f 6 6 f f c . . . . . 
+        . c 6 7 6 6 6 6 6 6 7 c . . . . 
+        . c 7 7 7 7 7 7 7 7 7 7 c . . . 
+        . c 7 7 7 6 1 f f 1 8 7 c . . . 
+        . f 7 7 7 f 1 f f 1 f 6 f . . . 
+        . f 7 7 7 f 2 2 2 2 f 6 f . . . 
+        . f 6 7 7 f 2 2 2 2 f 6 c c . . 
+        . . c f 7 7 2 2 2 2 7 7 7 7 c . 
+        . c 7 7 c c 7 7 7 7 7 1 1 1 7 c 
+        c 7 7 7 6 c f 7 7 7 1 1 1 1 1 f 
+        c c 6 6 6 c c f 6 1 1 1 1 1 1 f 
+        . . c 6 6 6 c 6 6 1 1 1 1 1 6 f 
+        . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+        . . . c 6 6 6 6 6 1 1 1 1 6 f . 
+        . . . . c c c c c c c c f f . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        c c c c c . . . . . . . . . . . 
+        c 6 7 7 7 c c . . . . . . . . . 
+        . c c 7 7 7 c c . . . . . . . . 
+        . . . c 7 7 6 c . . . . . . . . 
+        . . . c 6 6 6 c . . . . . . . . 
+        . . c c 6 6 6 c c c c c c . . . 
+        . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+        c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+        c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+        c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+        c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+        c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+        . c c 6 6 f 6 7 c 1 f f c 1 c . 
+        . . . c c c c c c c c c c c c . 
+        `,img`
+        c c c c c . . . . . . . . . . . 
+        c 6 7 7 7 c c . . . . . . . . . 
+        . c c 7 7 7 c c . . . . . . . . 
+        . . . c 7 7 6 c . . . . . . . . 
+        . . . c 6 6 6 c . . . . . . . . 
+        . . c c 6 6 6 c . . . . . . . . 
+        . c c 6 6 6 c c c c c c c . . . 
+        . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+        c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+        c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+        c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+        c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+        c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+        . c 6 6 f 6 7 7 7 7 7 7 7 7 f . 
+        . c c 6 6 f 6 7 c 1 f f c 1 c . 
+        . . . c c c c c c c c c c c c . 
+        `,img`
+        c c c c c . . . . . . . . . . . 
+        c 6 7 7 7 c c . . . . . . . . . 
+        . c c 7 7 7 c c . . . . . . . . 
+        . . . c 7 7 6 c . . . . . . . . 
+        . . . c 6 6 6 c . . . . . . . . 
+        . . c c 6 6 6 c . . . . . . . . 
+        . c c 6 6 6 c c c c c c c . . . 
+        . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+        c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+        c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+        c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+        c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+        c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+        . c 6 6 f 6 7 7 7 7 7 7 7 7 f . 
+        . c c 6 6 f 6 7 c 1 f f c 1 c . 
+        . . . c c c c c c c c c c c c . 
+        `],
+    100,
+    true
+    )
+    tiles.placeOnTile(mySprite, tiles.getTileLocation(10, 15))
 }
