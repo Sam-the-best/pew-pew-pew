@@ -17,6 +17,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, mySprite, -1000, 0)
+    music.play(music.createSoundEffect(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     milk_right = sprites.createProjectileFromSprite(img`
@@ -37,6 +38,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, mySprite, 1000, 0)
+    music.play(music.createSoundEffect(WaveShape.Square, 1600, 1, 255, 0, 300, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
@@ -224,6 +226,149 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+info.onLifeZero(function () {
+    music.play(music.createSong(hex`0078000408020100001c00010a006400f4016400000400000000000000000000000000050000044300040008000311292c08000c0001250c00100002192014001800030f191d1c00200002080d20002400010824002800010a28002c00010a2c003000010c30003400020d0f`), music.PlaybackMode.UntilDone)
+    music.play(music.createSoundEffect(WaveShape.Square, 5000, 5000, 255, 255, 9999, SoundExpressionEffect.Warble, InterpolationCurve.Linear), music.PlaybackMode.LoopingInBackground)
+    game.setGameOverEffect(true, effects.confetti)
+    game.gameOver(true)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    sprites.destroy(otherSprite, effects.fire, 5000)
+    for (let index = 0; index < 1; index++) {
+        snake = sprites.create(img`
+            . . . . c c c c c c c . . . . . 
+            . . . c 6 7 7 7 7 7 6 c . . . . 
+            . . c 6 7 c 6 6 6 6 c 7 c . . . 
+            . . c 7 7 6 f 6 6 f 6 7 6 c . . 
+            . . c 7 7 7 7 7 7 7 7 7 7 c . . 
+            . . f 7 7 7 6 1 f f 1 8 7 f . . 
+            . . f 7 7 7 f 1 f f 1 f 6 f . . 
+            . . f 6 7 7 f 2 2 2 2 f f . . . 
+            . . c f 6 7 7 2 2 2 2 f c c . . 
+            . c 7 7 c c 7 7 7 7 7 7 7 7 c . 
+            c 7 7 7 6 c f 7 7 7 7 1 1 1 7 c 
+            c c 6 6 6 c c f 6 7 1 1 1 1 1 f 
+            . . c 6 6 6 c 6 6 1 1 1 1 1 1 f 
+            . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+            . . . c 6 6 6 6 1 1 1 1 1 6 f . 
+            . . . . c c c c c c c c f f . . 
+            `, SpriteKind.Enemy)
+        animation.runImageAnimation(
+        snake,
+        [img`
+            . . . . c c c c c c c . . . . . 
+            . . . c 6 7 7 7 7 7 6 c . . . . 
+            . . c 6 7 c 6 6 6 6 c 7 c . . . 
+            . . c 7 7 6 f 6 6 f 6 7 6 c . . 
+            . . c 7 7 7 7 7 7 7 7 7 7 c . . 
+            . . f 7 7 7 6 1 f f 1 8 7 f . . 
+            . . f 7 7 7 f 1 f f 1 f 6 f . . 
+            . . f 6 7 7 f 2 2 2 2 f f . . . 
+            . . c f 6 7 7 2 2 2 2 f c c . . 
+            . c 7 7 c c 7 7 7 7 7 7 7 7 c . 
+            c 7 7 7 6 c f 7 7 7 7 1 1 1 7 c 
+            c c 6 6 6 c c f 6 7 1 1 1 1 1 f 
+            . . c 6 6 6 c 6 6 1 1 1 1 1 1 f 
+            . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+            . . . c 6 6 6 6 1 1 1 1 1 6 f . 
+            . . . . c c c c c c c c f f . . 
+            `,img`
+            . . . c c c c c c c . . . . . . 
+            . . c 7 f f 6 6 f f c . . . . . 
+            . c 6 7 6 6 6 6 6 6 7 c . . . . 
+            . c 7 7 7 7 7 7 7 7 7 7 c . . . 
+            . c 7 7 7 6 1 f f 1 8 7 c . . . 
+            . f 7 7 7 f 1 f f 1 f 6 f . . . 
+            . f 7 7 7 f 2 2 2 2 f 6 f . . . 
+            . f 6 7 7 f 2 2 2 2 f 6 c c . . 
+            . . c f 7 7 2 2 2 2 7 7 7 7 c . 
+            . c 7 7 c c 7 7 7 7 7 1 1 1 7 c 
+            c 7 7 7 6 c f 7 7 7 1 1 1 1 1 f 
+            c c 6 6 6 c c f 6 1 1 1 1 1 1 f 
+            . . c 6 6 6 c 6 6 1 1 1 1 1 6 f 
+            . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+            . . . c 6 6 6 6 6 1 1 1 1 6 f . 
+            . . . . c c c c c c c c f f . . 
+            `,img`
+            . . . c c c c c c c . . . . . . 
+            . . c 7 f f 6 6 f f c . . . . . 
+            . c 6 7 6 6 6 6 6 6 7 c . . . . 
+            . c 7 7 7 7 7 7 7 7 7 7 c . . . 
+            . c 7 7 7 6 1 f f 1 8 7 c . . . 
+            . f 7 7 7 f 1 f f 1 f 6 f . . . 
+            . f 7 7 7 f 2 2 2 2 f 6 f . . . 
+            . f 6 7 7 f 2 2 2 2 f 6 c c . . 
+            . . c f 7 7 2 2 2 2 7 7 7 7 c . 
+            . c 7 7 c c 7 7 7 7 7 1 1 1 7 c 
+            c 7 7 7 6 c f 7 7 7 1 1 1 1 1 f 
+            c c 6 6 6 c c f 6 1 1 1 1 1 1 f 
+            . . c 6 6 6 c 6 6 1 1 1 1 1 6 f 
+            . . c 6 6 6 6 6 6 1 1 1 1 1 6 f 
+            . . . c 6 6 6 6 6 1 1 1 1 6 f . 
+            . . . . c c c c c c c c f f . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            c c c c c . . . . . . . . . . . 
+            c 6 7 7 7 c c . . . . . . . . . 
+            . c c 7 7 7 c c . . . . . . . . 
+            . . . c 7 7 6 c . . . . . . . . 
+            . . . c 6 6 6 c . . . . . . . . 
+            . . c c 6 6 6 c c c c c c . . . 
+            . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+            c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+            c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+            c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+            c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+            c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+            . c c 6 6 f 6 7 c 1 f f c 1 c . 
+            . . . c c c c c c c c c c c c . 
+            `,img`
+            c c c c c . . . . . . . . . . . 
+            c 6 7 7 7 c c . . . . . . . . . 
+            . c c 7 7 7 c c . . . . . . . . 
+            . . . c 7 7 6 c . . . . . . . . 
+            . . . c 6 6 6 c . . . . . . . . 
+            . . c c 6 6 6 c . . . . . . . . 
+            . c c 6 6 6 c c c c c c c . . . 
+            . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+            c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+            c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+            c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+            c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+            c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+            . c 6 6 f 6 7 7 7 7 7 7 7 7 f . 
+            . c c 6 6 f 6 7 c 1 f f c 1 c . 
+            . . . c c c c c c c c c c c c . 
+            `,img`
+            c c c c c . . . . . . . . . . . 
+            c 6 7 7 7 c c . . . . . . . . . 
+            . c c 7 7 7 c c . . . . . . . . 
+            . . . c 7 7 6 c . . . . . . . . 
+            . . . c 6 6 6 c . . . . . . . . 
+            . . c c 6 6 6 c . . . . . . . . 
+            . c c 6 6 6 c c c c c c c . . . 
+            . c 6 6 6 c c 6 7 7 7 7 6 c . . 
+            c c 6 6 6 c 7 7 7 7 7 7 7 7 c . 
+            c 6 6 6 c 6 7 7 7 7 7 7 7 7 6 c 
+            c 6 6 6 c 7 7 7 c 6 6 6 6 c 7 c 
+            c 6 6 6 f 7 7 7 c c 6 6 c c 7 f 
+            c 6 6 6 f 7 7 7 6 f 6 6 f 6 7 f 
+            . c 6 6 f 6 7 7 7 7 7 7 7 7 f . 
+            . c c 6 6 f 6 7 c 1 f f c 1 c . 
+            . . . c c c c c c c c c c c c . 
+            `],
+        100,
+        true
+        )
+        tiles.placeOnTile(snake, tiles.getTileLocation(randint(3, 28), randint(3, 28)))
+        snake.follow(mySprite, randint(25, 75))
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+})
 let milk_right: Sprite = null
 let milk_left: Sprite = null
 let snake: Sprite = null
@@ -253,6 +398,8 @@ namespace userconfig {
 export const ARCADE_SCREEN_WIDTH = 225
 export const ARCADE_SCREEN_HEIGHT = 225
 }
+info.setLife(500)
+info.setScore(0)
 for (let index = 0; index < 10; index++) {
     snake = sprites.create(img`
         . . . . c c c c c c c . . . . . 
@@ -273,7 +420,7 @@ for (let index = 0; index < 10; index++) {
         . . . . c c c c c c c c f f . . 
         `, SpriteKind.Enemy)
     animation.runImageAnimation(
-    mySprite,
+    snake,
     [img`
         . . . . c c c c c c c . . . . . 
         . . . c 6 7 7 7 7 7 6 c . . . . 
@@ -380,5 +527,6 @@ for (let index = 0; index < 10; index++) {
     100,
     true
     )
-    tiles.placeOnTile(mySprite, tiles.getTileLocation(10, 15))
+    tiles.placeOnTile(snake, tiles.getTileLocation(randint(3, 28), randint(3, 28)))
+    snake.follow(mySprite, randint(25, 75))
 }
