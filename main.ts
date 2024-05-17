@@ -227,7 +227,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 info.onLifeZero(function () {
-    music.play(music.createSong(hex`0078000408020100001c00010a006400f4016400000400000000000000000000000000050000044300040008000311292c08000c0001250c00100002192014001800030f191d1c00200002080d20002400010824002800010a28002c00010a2c003000010c30003400020d0f`), music.PlaybackMode.UntilDone)
+    music.play(music.createSong(assets.song`Good Song`), music.PlaybackMode.UntilDone)
     music.play(music.createSoundEffect(WaveShape.Square, 5000, 5000, 255, 255, 9999, SoundExpressionEffect.Warble, InterpolationCurve.Linear), music.PlaybackMode.LoopingInBackground)
     game.setGameOverEffect(true, effects.confetti)
     game.gameOver(true)
@@ -235,7 +235,7 @@ info.onLifeZero(function () {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeScoreBy(1)
     sprites.destroy(otherSprite, effects.fire, 5000)
-    for (let index = 0; index < 1; index++) {
+    for (let index = 0; index < Spawn_Count; index++) {
         snake = sprites.create(img`
             . . . . c c c c c c c . . . . . 
             . . . c 6 7 7 7 7 7 6 c . . . . 
@@ -373,6 +373,12 @@ let milk_right: Sprite = null
 let milk_left: Sprite = null
 let snake: Sprite = null
 let mySprite: Sprite = null
+let Spawn_Count = 0
+if (game.ask("Kill 1 Spawn 1 or Kill 1 Spawn 2")) {
+    Spawn_Count = 1
+} else {
+    Spawn_Count = 2
+}
 tiles.setCurrentTilemap(tilemap`level2`)
 mySprite = sprites.create(img`
     . . . . . . . f f f f f . . . . 
